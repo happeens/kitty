@@ -316,6 +316,7 @@ create_os_window(PyObject UNUSED *self, PyObject *args) {
         // We dont use depth and stencil buffers
         glfwWindowHint(GLFW_DEPTH_BITS, 0);
         glfwWindowHint(GLFW_STENCIL_BITS, 0);
+
 #ifdef __APPLE__
         if (OPT(macos_hide_titlebar)) glfwWindowHint(GLFW_DECORATED, false);
         glfwWindowHint(GLFW_COCOA_GRAPHICS_SWITCHING, true);
@@ -328,6 +329,19 @@ create_os_window(PyObject UNUSED *self, PyObject *args) {
             PyErr_SetString(PyExc_ValueError, "Failed to create standard mouse cursors"); return NULL;
         }
     }
+
+    // Always turn off decorations!
+    glfwWindowHint(GLFW_DECORATED, false);
+    glfwWindowHint(GLFW_AUTO_ICONIFY, true);
+
+    // Get width and height for borderless fullscreen
+    const GLFWmonitor* monitor = glfwGetPrimaryMonitor();
+    const GLFWvidmode* mode = glfwGetVideoMode((GLFWmonitor*)monitor);
+
+    glfwWindowHint(GLFW_RED_BITS, mode->redBits);
+    glfwWindowHint(GLFW_GREEN_BITS, mode->greenBits);
+    glfwWindowHint(GLFW_BLUE_BITS, mode->blueBits);
+    glfwWindowHint(GLFW_REFRESH_RATE, mode->refreshRate);
 
 #ifndef __APPLE__
     glfwWindowHintString(GLFW_X11_INSTANCE_NAME, wm_class_name);

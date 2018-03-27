@@ -501,6 +501,7 @@ static void setFullscreen(_GLFWwindow* window, _GLFWmonitor* monitor, int refres
             refreshRate * 1000, // Convert Hz to mHz.
             monitor->wl.output);
     }
+
     setIdleInhibitor(window, GLFW_TRUE);
     destroyDecorations(window);
 }
